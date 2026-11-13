@@ -27,23 +27,10 @@ A responsive, multi-page student portfolio showcasing software engineering inter
 
 **Important:** The contact form is a browser-only demonstration. It does not send email or save submissions to a remote database. The shopping checkout is also a demonstration; no payments or real orders are processed. Avoid entering sensitive information.
 
-## Run locally
-
-Download or clone the repository, then open `index.html` in a modern browser. For consistent behavior, you may also serve the folder using a simple local static server (for example, VS Code Live Server).
-
-## Deploy to GitHub and Vercel
-
-1. Create a new GitHub repository and upload **the contents of this folder** to its root (so `index.html` is at repository root).
-2. In Vercel, select **Add New → Project** and import that GitHub repository.
-3. Choose **Other** for the framework preset, leave the build command empty, and set the output directory to the repository root (`.`) if Vercel asks for one.
-4. Deploy. Verify Home, About, Projects, Planner, Contact, each project link, and audio playback on the live site.
-
-No environment variables, database, or package installation are required.
-
 ## Submission links
 
-- GitHub repository: _Add URL after publishing._
-- Live website: _Add URL after deployment._
+- GitHub repository: https://github.com/jdowyaro7574/CSC106Lab-J
+- Live website: https://portfolio-website-seven-gamma-81.vercel.app/index.html
 
 ## Credits
 
