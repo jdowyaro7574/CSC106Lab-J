@@ -1,0 +1,49 @@
+(() => {
+'use strict';
+const PRODUCTS=[
+{id:1,name:'Executive Tailored Suit',category:'Suits',price:185000,badge:'BESTSELLER',color:'#cbd5c7',tone:'#273f37',kind:'suit'},
+{id:2,name:'Classic Oxford Shoes',category:'Shoes',price:69000,badge:'SIGNATURE',color:'#e7dccb',tone:'#513c30',kind:'shoe'},
+{id:3,name:'Apex Pro 14 Laptop',category:'Laptops',price:675000,badge:'POPULAR',color:'#d7e4e0',tone:'#3b535b',kind:'laptop'},
+{id:4,name:'Minimalist Wristwatch',category:'Accessories',price:45500,badge:'NEW',color:'#e4e8db',tone:'#53664c',kind:'watch'},
+{id:5,name:'Midnight Three-Piece Suit',category:'Suits',price:245000,badge:'PREMIUM',color:'#d2d4d7',tone:'#242c3d',kind:'suit'},
+{id:6,name:'Everyday Leather Loafers',category:'Shoes',price:58000,badge:'EVERYDAY',color:'#e9dcca',tone:'#76563f',kind:'shoe'},
+{id:7,name:'NovaBook Air 13',category:'Laptops',price:485000,badge:'LIGHTWEIGHT',color:'#dce4ed',tone:'#a5aebd',kind:'laptop'},
+{id:8,name:'Essential Leather Belt',category:'Accessories',price:18500,badge:'ESSENTIAL',color:'#e8dfd4',tone:'#654a36',kind:'belt'},
+{id:9,name:'Sage Modern Fit Suit',category:'Suits',price:198000,badge:'NEW',color:'#d8e2d3',tone:'#708575',kind:'suit'},
+{id:10,name:'Urban Low-Top Sneakers',category:'Shoes',price:52000,badge:'TRENDING',color:'#e3e8e0',tone:'#e8e6dc',kind:'shoe'},
+{id:11,name:'Vertex Studio 15 Laptop',category:'Laptops',price:825000,badge:'PRO',color:'#d8e1e0',tone:'#364648',kind:'laptop'},
+{id:12,name:'Heritage Leather Briefcase',category:'Accessories',price:78500,badge:'CURATED',color:'#e5d9c8',tone:'#77553a',kind:'bag'}
+];
+const PHOTO_NAMES=new Set(["Minimalist Wristwatch", "NovaBook Air 13", "Sage Modern Fit Suit", "Apex Pro 14 Laptop", "Classic Oxford Shoes", "Essential Leather Belt", "Everyday Leather Loafers", "Executive Tailored Suit", "Heritage Leather Briefcase", "Midnight Three-Piece Suit", "Urban Low-Top Sneakers", "Vertex Studio 15 Laptop"]);
+function productVisual(p){return PHOTO_NAMES.has(p.name)?`<img src="images/${p.name}.webp" alt="${p.name}" loading="lazy" decoding="async">`:illustration(p);}
+const $=id=>document.getElementById(id),money=n=>'₦'+n.toLocaleString('en-NG');
+let category='All',query='',sort='featured',cart={};let toastTimer;
+try{const saved=JSON.parse(localStorage.getItem('dowyaro-store-cart')||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))for(const [id,n] of Object.entries(saved)){if(PRODUCTS.some(p=>String(p.id)===id)&&Number.isInteger(n)&&n>0&&n<=99)cart[id]=n;}}catch{}
+function save(){try{localStorage.setItem('dowyaro-store-cart',JSON.stringify(cart));}catch{}}
+function illustration(p){const c=p.tone;
+const shapes={
+suit:`<path d="M95 42L125 31L155 42L174 67L195 199L156 206L149 108L143 231L107 231L101 108L94 206L55 199L76 67Z" fill="${c}"/><path d="M108 36L125 63L142 36L135 114L125 139L115 114Z" fill="#f4f1e8"/><path d="M125 63L117 81L125 121L133 81Z" fill="#244b38"/><path d="M108 36L95 43L111 104L125 139L116 73Z" fill="#ffffff24"/><path d="M142 36L155 43L139 104L125 139L134 73Z" fill="#00000016"/><path d="M125 139V231" stroke="#ffffff55" stroke-width="2"/><path d="M150 144H170" stroke="#ffffff77" stroke-width="3"/>`,
+shoe:`<path d="M45 146Q64 145 78 116L102 104L140 145Q159 161 192 163Q207 167 208 182L206 198Q135 210 53 197Q37 189 45 146Z" fill="${c}" stroke="#0003" stroke-width="4"/><path d="M45 178Q118 193 208 181L207 197Q122 213 48 196Z" fill="#222b29"/><path d="M101 124L128 150M92 134L118 158M83 143L107 166" stroke="#fff8" stroke-width="4" stroke-linecap="round"/><path d="M143 154Q169 170 196 169" fill="none" stroke="#fff5" stroke-width="3"/>`,
+laptop:`<rect x="53" y="45" width="144" height="124" rx="8" fill="${c}" stroke="#243e3d" stroke-width="5"/><rect x="62" y="54" width="126" height="105" rx="2" fill="#183e39"/><path d="M64 144L187 66" stroke="#6fbd8d" stroke-width="4" opacity=".7"/><circle cx="124" cy="109" r="26" fill="#9ac6a4" opacity=".2"/><path d="M38 170H212L226 188Q226 197 207 197H43Q24 197 24 188Z" fill="#a6b6b5" stroke="#465a5a" stroke-width="3"/><path d="M106 182H146L153 189H99Z" fill="#667e7a"/>`,
+watch:`<rect x="106" y="20" width="38" height="210" rx="12" fill="${c}"/><circle cx="125" cy="124" r="62" fill="#c1b99b" stroke="#5b6255" stroke-width="6"/><circle cx="125" cy="124" r="49" fill="#1d332b" stroke="#b3c6b0" stroke-width="3"/><path d="M125 86V125L148 137" fill="none" stroke="#f5eee0" stroke-width="5" stroke-linecap="round"/><circle cx="125" cy="124" r="5" fill="#c0dbb7"/>`,
+belt:`<path d="M48 135C38 70 203 69 204 133C205 174 126 190 72 164" fill="none" stroke="${c}" stroke-width="25" stroke-linecap="round"/><rect x="52" y="140" width="60" height="40" rx="6" fill="none" stroke="#c0ad83" stroke-width="9"/><path d="M80 160H133" stroke="#d8c7a4" stroke-width="6"/>`,
+bag:`<rect x="43" y="92" width="164" height="123" rx="15" fill="${c}" stroke="#0003" stroke-width="3"/><path d="M92 96V77Q92 48 125 48Q158 48 158 77V96" fill="none" stroke="${c}" stroke-width="14"/><path d="M43 136Q125 178 207 136" fill="none" stroke="#ffffff55" stroke-width="4"/><rect x="114" y="145" width="22" height="22" rx="3" fill="#c3a776"/>`
+};return `<svg viewBox="0 0 250 250" role="img" aria-label="${p.category} product illustration" xmlns="http://www.w3.org/2000/svg">${shapes[p.kind]}</svg>`;}
+function renderProducts(){let items=PRODUCTS.filter(p=>(category==='All'||p.category===category)&&(p.name+' '+p.category).toLowerCase().includes(query));if(sort==='price-asc')items.sort((a,b)=>a.price-b.price);if(sort==='price-desc')items.sort((a,b)=>b.price-a.price);if(sort==='name')items.sort((a,b)=>a.name.localeCompare(b.name));$('results-label').textContent=`${items.length} ${items.length===1?'PIECE':'PIECES'}`;$('no-results').hidden=items.length!==0;$('products').innerHTML=items.map(p=>`<article class="product"><div class="product-art" style="background:${p.color}"><span class="product-badge">${p.badge}</span>${productVisual(p)}</div><div class="product-details"><span class="product-cat">${p.category.toUpperCase()}</span><h3>${p.name}</h3><div class="product-bottom"><span class="product-price">${money(p.price)}</span><button class="add-btn" data-add="${p.id}" aria-label="Add ${p.name} to bag">ADD +</button></div></div></article>`).join('');document.querySelectorAll('[data-category]').forEach(b=>{const active=b.dataset.category===category;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});}
+function count(){return Object.values(cart).reduce((a,b)=>a+b,0);}
+function renderCart(){const n=count();$('cart-count').textContent=n;$('drawer-count').textContent=`(${n})`;const items=PRODUCTS.filter(p=>cart[p.id]);$('cart-items').innerHTML=items.length?items.map(p=>`<div class="cart-item"><div class="cart-thumb" style="background:${p.color}">${productVisual(p)}</div><div><strong>${p.name}</strong><small>${money(p.price)}</small><div class="qty"><button data-qty="${p.id}" data-delta="-1" aria-label="Decrease quantity of ${p.name}">−</button><span>${cart[p.id]}</span><button data-qty="${p.id}" data-delta="1" aria-label="Increase quantity of ${p.name}">+</button></div></div><div><strong>${money(p.price*cart[p.id])}</strong><button class="remove" data-remove="${p.id}">Remove</button></div></div>`).join(''):'<p class="cart-empty">Your shopping bag is empty.<br>Explore the collection and find something you love.</p>';$('subtotal').textContent=money(items.reduce((sum,p)=>sum+p.price*cart[p.id],0));$('checkout').disabled=n===0;save();}
+function notify(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000);}
+function setCategory(next){category=next;renderProducts();document.getElementById('shop').scrollIntoView({behavior:'smooth'});}
+document.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>setCategory(b.dataset.category)));
+$('search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderProducts();});
+$('sort').addEventListener('change',e=>{sort=e.target.value;renderProducts();});
+$('products').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const id=b.dataset.add;cart[id]=Math.min(99,(cart[id]||0)+1);renderCart();notify('Added to your shopping bag');});
+function openCart(){$('overlay').hidden=false;$('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('close-cart').focus();}
+function closeCart(){$('overlay').hidden=true;$('drawer').classList.remove('open');$('drawer').setAttribute('aria-hidden','true');document.body.style.overflow='';$('cart-trigger').focus();}
+$('cart-trigger').addEventListener('click',openCart);$('close-cart').addEventListener('click',closeCart);$('continue').addEventListener('click',closeCart);$('overlay').addEventListener('click',closeCart);
+$('cart-items').addEventListener('click',e=>{const q=e.target.closest('[data-qty]'),r=e.target.closest('[data-remove]');if(q){const id=q.dataset.qty;cart[id]=Math.min(99,Math.max(0,(cart[id]||0)+Number(q.dataset.delta)));if(!cart[id])delete cart[id];renderCart();}if(r){delete cart[r.dataset.remove];renderCart();}});
+$('checkout').addEventListener('click',()=>{if(!count())return;cart={};renderCart();closeCart();$('confirmation').hidden=false;$('done').focus();});
+$('done').addEventListener('click',()=>{$('confirmation').hidden=true;$('cart-trigger').focus();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('confirmation').hidden){$('confirmation').hidden=true;$('cart-trigger').focus();}else if($('drawer').classList.contains('open'))closeCart();}});
+renderProducts();renderCart();
+})();
